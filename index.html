@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="so">
+<head>
+<meta charset="utf-8">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#2456d6">
+<link rel="icon" href="icon.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nidaamka Xisaabta</title>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--tx:#14181f;--mut:#667085;--bd:#e4e7ec;--inc:#0a8f55;--exp:#d92d20;--acc:#2456d6;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1218;--card:#181c25;--tx:#eef0f4;--mut:#98a2b3;--bd:#2a3040;--inc:#32d583;--exp:#f97066;--acc:#7a9cff}}
+:root[data-theme="dark"]{--bg:#0f1218;--card:#181c25;--tx:#eef0f4;--mut:#98a2b3;--bd:#2a3040;--inc:#32d583;--exp:#f97066;--acc:#7a9cff}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:560px;margin:0 auto;padding:16px}
+h1{font-size:20px;margin:4px 0 14px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:14px}
+.bal{text-align:center}
+.bal small{color:var(--mut)}
+.bal .n{font-size:34px;font-weight:700;margin:4px 0}
+.row{display:flex;gap:10px}
+.row>div{flex:1;text-align:center;padding:10px;border-radius:10px;background:var(--bg)}
+.row b{display:block;font-size:18px;margin-top:2px}
+.inc{color:var(--inc)}.exp{color:var(--exp)}
+.seg{display:flex;gap:8px;margin-bottom:10px}
+.seg button{flex:1;padding:10px;border-radius:10px;border:1px solid var(--bd);background:var(--bg);color:var(--tx);font-size:15px}
+.seg button.on.i{background:var(--inc);color:#fff;border-color:var(--inc)}
+.seg button.on.e{background:var(--exp);color:#fff;border-color:var(--exp)}
+input{width:100%;padding:11px;margin-bottom:10px;border-radius:10px;border:1px solid var(--bd);background:var(--bg);color:var(--tx);font-size:16px}
+.add{width:100%;padding:12px;border:0;border-radius:10px;background:var(--acc);color:#fff;font-size:16px;font-weight:600}
+.item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--bd)}
+.item:last-child{border:0}
+.item .d{flex:1;min-width:0}
+.item .d span{display:block;color:var(--mut);font-size:12px}
+.item .a{font-weight:600}
+.del{background:none;border:0;color:var(--mut);font-size:18px;padding:4px 8px}
+.empty{color:var(--mut);text-align:center;padding:12px}
+</style>
+</head>
+<body>
+<main>
+<h1>Nidaamka Xisaabta</h1>
+<div id="st" style="color:var(--mut);font-size:12px;margin:-8px 0 12px"></div>
+<div class="card bal">
+<small>Haraaga (Balance)</small>
+<div class="n" id="bal">0.00</div>
+<div class="row">
+<div><small>Dakhliga</small><b class="inc" id="inc">0.00</b></div>
+<div><small>Kharashka</small><b class="exp" id="exp">0.00</b></div>
+</div>
+</div>
+<div class="card">
+<div class="seg">
+<button class="i on" id="bi" type="button">+ Dakhli</button>
+<button class="e" id="be" type="button">− Kharash</button>
+</div>
+<input id="desc" placeholder="Faahfaahin (tusaale: Mushahar)">
+<input id="amt" type="number" inputmode="decimal" min="0" step="any" placeholder="Qaddarka">
+<button class="add" id="add" type="button">Ku dar</button>
+</div>
+<div class="card" id="list"></div>
+<div class="card">
+<div class="seg" style="margin:0">
+<button type="button" id="bx">⬇ Ku kaydi phone-ka</button>
+<button type="button" id="bm">⬆ Soo celi xogta</button>
+</div>
+<input type="file" id="fi" accept=".json,application/json" hidden>
+<div id="bs" style="color:var(--mut);font-size:12px;margin-top:8px"></div>
+</div>
+</main>
+<script>
+let type='i',items=[];
+const $=id=>document.getElementById(id);
+const f=n=>n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function save(){try{localStorage.setItem('xisaab',JSON.stringify(items))}catch(e){$('st').textContent='Khalad: lama kaydin'}}
+function render(){
+ let i=0,e=0;
+ items.forEach(t=>t.type==='i'?i+=t.amt:e+=t.amt);
+ const b=i-e;
+ $('inc').textContent=f(i);$('exp').textContent=f(e);
+ $('bal').textContent=f(b);$('bal').className='n '+(b<0?'exp':'inc');
+ const l=$('list');
+ if(!items.length){l.innerHTML='<div class="empty">Wax xog ah lagama dhex helin</div>';return}
+ l.innerHTML=items.slice().sort((x,y)=>y.id-x.id).map(t=>`<div class="item"><div class="d">${esc(t.desc||(t.type==='i'?'Dakhli':'Kharash'))}<span>${esc(t.date)}</span></div><div class="a ${t.type==='i'?'inc':'exp'}">${t.type==='i'?'+':'−'}${f(t.amt)}</div><button class="del" data-id="${t.id}" type="button">✕</button></div>`).join('');
+}
+$('bi').onclick=()=>{type='i';$('bi').classList.add('on');$('be').classList.remove('on')};
+$('be').onclick=()=>{type='e';$('be').classList.add('on');$('bi').classList.remove('on')};
+$('add').onclick=()=>{
+ const a=parseFloat($('amt').value);
+ if(!a||a<=0){$('amt').focus();return}
+ items.push({id:Date.now(),type,desc:$('desc').value.trim(),amt:a,date:new Date().toLocaleDateString('en-GB')});
+ $('desc').value='';$('amt').value='';save();render();
+};
+$('list').onclick=ev=>{
+ const id=ev.target.dataset&&ev.target.dataset.id;
+ if(id){items=items.filter(t=>String(t.id)!==id);save();render()}
+};
+$('bx').onclick=()=>{
+ const u=URL.createObjectURL(new Blob([JSON.stringify(items)],{type:'application/json'}));
+ const a=document.createElement('a');a.href=u;a.download='xisaab-backup-'+new Date().toISOString().slice(0,10)+'.json';
+ document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),2000);
+ $('bs').textContent='✓ Fayl ahaan ayaa loo kaydiyay';
+};
+$('bm').onclick=()=>$('fi').click();
+$('fi').onchange=async ev=>{
+ const file=ev.target.files[0];if(!file)return;
+ try{
+  const arr=JSON.parse(await file.text());let n=0;
+  for(const t of arr){
+   if(!t||!t.id||!(t.amt>0)||(t.type!=='i'&&t.type!=='e'))continue;
+   if(!items.some(x=>x.id===Number(t.id))){items.push({id:Number(t.id),type:t.type,desc:String(t.desc||''),amt:Number(t.amt),date:String(t.date||'')});n++}
+  }
+  save();render();$('bs').textContent='✓ '+n+' xog ayaa la soo celiyay';
+ }catch(e){$('bs').textContent='Faylkan ma saxna'}
+ ev.target.value='';
+};
+try{items=JSON.parse(localStorage.getItem('xisaab')||'[]')}catch(e){items=[]}
+$('st').textContent='Offline · xogtu waxay ku kaydsan tahay qalabkan';
+render();
+if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{})}
+</script>
+</body>
+</html>
