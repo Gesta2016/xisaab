@@ -2,47 +2,66 @@
 <html lang="so">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#2456d6">
 <link rel="icon" href="icon.svg">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Nidaamka Xisaabta</title>
 <style>
 :root{--bg:#f6f7f9;--card:#fff;--tx:#14181f;--mut:#667085;--bd:#e4e7ec;--inc:#0a8f55;--exp:#d92d20;--acc:#2456d6;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1218;--card:#181c25;--tx:#eef0f4;--mut:#98a2b3;--bd:#2a3040;--inc:#32d583;--exp:#f97066;--acc:#7a9cff}}
-:root[data-theme="dark"]{--bg:#0f1218;--card:#181c25;--tx:#eef0f4;--mut:#98a2b3;--bd:#2a3040;--inc:#32d583;--exp:#f97066;--acc:#7a9cff}
+@media (prefers-color-scheme:dark){:root{--bg:#0f1218;--card:#181c25;--tx:#eef0f4;--mut:#98a2b3;--bd:#2a3040;--inc:#32d583;--exp:#f97066;--acc:#7a9cff}}
 *{box-sizing:border-box}
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
 body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-main{max-width:560px;margin:0 auto;padding:16px}
-h1{font-size:20px;margin:4px 0 14px}
+main{max-width:720px;margin:0 auto;padding:16px}
+h1{font-size:20px;margin:4px 0 4px}
+.sub{color:var(--mut);font-size:12px;margin-bottom:12px}
 .card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:14px}
 .bal{text-align:center}
 .bal small{color:var(--mut)}
 .bal .n{font-size:34px;font-weight:700;margin:4px 0}
 .row{display:flex;gap:10px}
 .row>div{flex:1;text-align:center;padding:10px;border-radius:10px;background:var(--bg)}
-.row b{display:block;font-size:18px;margin-top:2px}
+.row b{display:block;font-size:17px;margin-top:2px}
 .inc{color:var(--inc)}.exp{color:var(--exp)}
 .seg{display:flex;gap:8px;margin-bottom:10px}
-.seg button{flex:1;padding:10px;border-radius:10px;border:1px solid var(--bd);background:var(--bg);color:var(--tx);font-size:15px}
+.seg button{flex:1;padding:10px;border-radius:10px;border:1px solid var(--bd);background:var(--bg);color:var(--tx);font-size:14px}
 .seg button.on.i{background:var(--inc);color:#fff;border-color:var(--inc)}
 .seg button.on.e{background:var(--exp);color:#fff;border-color:var(--exp)}
-input{width:100%;padding:11px;margin-bottom:10px;border-radius:10px;border:1px solid var(--bd);background:var(--bg);color:var(--tx);font-size:16px}
+input,select{width:100%;padding:11px;margin-bottom:10px;border-radius:10px;border:1px solid var(--bd);background:var(--bg);color:var(--tx);font-size:16px}
 .add{width:100%;padding:12px;border:0;border-radius:10px;background:var(--acc);color:#fff;font-size:16px;font-weight:600}
-.item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--bd)}
-.item:last-child{border:0}
-.item .d{flex:1;min-width:0}
-.item .d span{display:block;color:var(--mut);font-size:12px}
-.item .a{font-weight:600}
-.del{background:none;border:0;color:var(--mut);font-size:18px;padding:4px 8px}
-.empty{color:var(--mut);text-align:center;padding:12px}
+.head{display:flex;gap:10px;align-items:center;margin-bottom:10px}
+.head select{margin:0;flex:1}
+.wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:480px}
+th{background:var(--acc);color:#fff;text-align:left;padding:8px;font-weight:600;white-space:nowrap}
+th.r,td.r{text-align:right}
+td{padding:8px;border-bottom:1px solid var(--bd);white-space:nowrap}
+td.ds{white-space:normal;min-width:110px}
+tr.op td{background:var(--bg);font-style:italic}
+.del{background:none;border:0;color:var(--mut);font-size:16px;padding:2px 6px}
+.empty{color:var(--mut);text-align:center;padding:14px}
+.ex{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ex button{padding:11px;border-radius:10px;border:1px solid var(--bd);background:var(--bg);color:var(--tx);font-size:14px}
+.ex .pri{background:var(--acc);color:#fff;border-color:var(--acc);grid-column:1/3;font-weight:600}
+#bs{color:var(--mut);font-size:12px;margin-top:8px}
+.pt{display:none}
+@media print{
+ body{background:#fff;color:#000}
+ .noprint{display:none!important}
+ .pt{display:block}
+ .card{border:0;padding:0}
+ th{background:#2456d6!important;color:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+ .del{display:none}
+ .wrap{overflow:visible}
+}
 </style>
 </head>
 <body>
 <main>
 <h1>Nidaamka Xisaabta</h1>
-<div id="st" style="color:var(--mut);font-size:12px;margin:-8px 0 12px"></div>
+<div class="sub noprint" id="st"></div>
+<div class="pt" id="pt"></div>
+
 <div class="card bal">
 <small>Haraaga (Balance)</small>
 <div class="n" id="bal">0.00</div>
@@ -50,59 +69,200 @@ input{width:100%;padding:11px;margin-bottom:10px;border-radius:10px;border:1px s
 <div><small>Dakhliga</small><b class="inc" id="inc">0.00</b></div>
 <div><small>Kharashka</small><b class="exp" id="exp">0.00</b></div>
 </div>
+<div class="sub" id="op" style="margin:10px 0 0"></div>
 </div>
-<div class="card">
+
+<div class="card noprint">
 <div class="seg">
 <button class="i on" id="bi" type="button">+ Dakhli</button>
 <button class="e" id="be" type="button">− Kharash</button>
 </div>
+<input id="dt" type="date">
 <input id="desc" placeholder="Faahfaahin (tusaale: Mushahar)">
 <input id="amt" type="number" inputmode="decimal" min="0" step="any" placeholder="Qaddarka">
 <button class="add" id="add" type="button">Ku dar</button>
 </div>
-<div class="card" id="list"></div>
+
 <div class="card">
-<div class="seg" style="margin:0">
-<button type="button" id="bx">⬇ Ku kaydi phone-ka</button>
-<button type="button" id="bm">⬆ Soo celi xogta</button>
+<div class="head noprint">
+<b>Statement</b>
+<select id="per"></select>
+</div>
+<div class="wrap" id="list"></div>
+</div>
+
+<div class="card noprint">
+<div class="ex">
+<button class="pri" id="bxl" type="button">📊 Excel (.xlsx)</button>
+<button id="bcsv" type="button">CSV</button>
+<button id="bpdf" type="button">🖨 PDF / Print</button>
+<button id="bx" type="button">⬇ Backup</button>
+<button id="bm" type="button">⬆ Soo celi</button>
 </div>
 <input type="file" id="fi" accept=".json,application/json" hidden>
-<div id="bs" style="color:var(--mut);font-size:12px;margin-top:8px"></div>
+<div id="bs"></div>
 </div>
 </main>
+
 <script>
-let type='i',items=[];
 const $=id=>document.getElementById(id);
+let type='i',items=[],period='all';
 const f=n=>n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
-const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const pad=n=>String(n).padStart(2,'0');
+const isoOf=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const dOf=t=>t.d||isoOf(new Date(t.id));
+const show=i=>i.slice(8,10)+'/'+i.slice(5,7)+'/'+i.slice(0,4);
+const serial=i=>Math.round(Date.UTC(+i.slice(0,4),+i.slice(5,7)-1,+i.slice(8,10))/864e5)+25569;
+const r2=n=>Math.round(n*100)/100;
+const MN=['Janaayo','Febraayo','Maarso','Abriil','Maajo','Juun','Luuliyo','Ogosto','Sebtembar','Oktoobar','Nofembar','Desembar'];
+const mlabel=p=>p==='all'?'Dhammaan':MN[+p.slice(5)-1]+' '+p.slice(0,4);
+
 function save(){try{localStorage.setItem('xisaab',JSON.stringify(items))}catch(e){$('st').textContent='Khalad: lama kaydin'}}
+function withBal(){
+ let b=0;
+ return items.slice().map(t=>({...t,d:dOf(t)})).sort((x,y)=>x.d<y.d?-1:x.d>y.d?1:x.id-y.id)
+  .map(t=>{b=r2(b+(t.type==='i'?t.amt:-t.amt));return {...t,bal:b}});
+}
+function view(){
+ const all=withBal();
+ const rows=period==='all'?all:all.filter(r=>r.d.startsWith(period));
+ const before=period==='all'?[]:all.filter(r=>r.d<period+'-01');
+ const opening=before.length?before[before.length-1].bal:0;
+ let inc=0,exp=0;
+ rows.forEach(r=>r.type==='i'?inc+=r.amt:exp+=r.amt);
+ const closing=rows.length?rows[rows.length-1].bal:opening;
+ return {all,rows,opening,inc:r2(inc),exp:r2(exp),closing,hasOpening:period!=='all'&&before.length>0};
+}
+function months(){
+ const s=new Set(items.map(t=>dOf(t).slice(0,7)));
+ return [...s].sort().reverse();
+}
 function render(){
- let i=0,e=0;
- items.forEach(t=>t.type==='i'?i+=t.amt:e+=t.amt);
- const b=i-e;
- $('inc').textContent=f(i);$('exp').textContent=f(e);
- $('bal').textContent=f(b);$('bal').className='n '+(b<0?'exp':'inc');
- const l=$('list');
- if(!items.length){l.innerHTML='<div class="empty">Wax xog ah lagama dhex helin</div>';return}
- l.innerHTML=items.slice().sort((x,y)=>y.id-x.id).map(t=>`<div class="item"><div class="d">${esc(t.desc||(t.type==='i'?'Dakhli':'Kharash'))}<span>${esc(t.date)}</span></div><div class="a ${t.type==='i'?'inc':'exp'}">${t.type==='i'?'+':'−'}${f(t.amt)}</div><button class="del" data-id="${t.id}" type="button">✕</button></div>`).join('');
+ const v=view();
+ $('inc').textContent=f(v.inc);$('exp').textContent=f(v.exp);
+ $('bal').textContent=f(v.closing);$('bal').className='n '+(v.closing<0?'exp':'inc');
+ $('op').textContent=v.hasOpening?'Haraaga hore: '+f(v.opening):'';
+ const ms=months();
+ if(period!=='all'&&!ms.includes(period))period='all';
+ $('per').innerHTML='<option value="all">Dhammaan</option>'+ms.map(m=>`<option value="${m}"${m===period?' selected':''}>${mlabel(m)}</option>`).join('');
+ $('pt').textContent='Statement: '+mlabel(period)+' · '+new Date().toLocaleDateString('en-GB');
+ if(!v.rows.length){$('list').innerHTML='<div class="empty">Wax xog ah lagama dhex helin</div>';return}
+ const body=v.rows.slice().reverse().map(r=>`<tr><td>${show(r.d)}</td><td class="ds">${esc(r.desc||(r.type==='i'?'Dakhli':'Kharash'))}</td><td class="r inc">${r.type==='i'?f(r.amt):''}</td><td class="r exp">${r.type==='e'?f(r.amt):''}</td><td class="r"><b>${f(r.bal)}</b></td><td><button class="del" data-id="${r.id}" type="button">✕</button></td></tr>`).join('');
+ const op=v.hasOpening?`<tr class="op"><td></td><td>Haraaga hore</td><td></td><td></td><td class="r">${f(v.opening)}</td><td></td></tr>`:'';
+ $('list').innerHTML=`<table><thead><tr><th>Taariikh</th><th>Faahfaahin</th><th class="r">Dakhli</th><th class="r">Kharash</th><th class="r">Haraaga</th><th></th></tr></thead><tbody>${body}${op}</tbody></table>`;
 }
 $('bi').onclick=()=>{type='i';$('bi').classList.add('on');$('be').classList.remove('on')};
 $('be').onclick=()=>{type='e';$('be').classList.add('on');$('bi').classList.remove('on')};
 $('add').onclick=()=>{
  const a=parseFloat($('amt').value);
  if(!a||a<=0){$('amt').focus();return}
- items.push({id:Date.now(),type,desc:$('desc').value.trim(),amt:a,date:new Date().toLocaleDateString('en-GB')});
+ items.push({id:Date.now(),type,desc:$('desc').value.trim(),amt:a,d:$('dt').value||isoOf(new Date())});
  $('desc').value='';$('amt').value='';save();render();
 };
 $('list').onclick=ev=>{
  const id=ev.target.dataset&&ev.target.dataset.id;
- if(id){items=items.filter(t=>String(t.id)!==id);save();render()}
+ if(id&&confirm('Ma tirtirtaa?')){items=items.filter(t=>String(t.id)!==id);save();render()}
 };
-$('bx').onclick=()=>{
- const u=URL.createObjectURL(new Blob([JSON.stringify(items)],{type:'application/json'}));
- const a=document.createElement('a');a.href=u;a.download='xisaab-backup-'+new Date().toISOString().slice(0,10)+'.json';
- document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),2000);
- $('bs').textContent='✓ Fayl ahaan ayaa loo kaydiyay';
+$('per').onchange=e=>{period=e.target.value;render()};
+
+/* ---------- file output ---------- */
+async function out(name,blob){
+ const file=new File([blob],name,{type:blob.type});
+ const mobile=matchMedia('(pointer:coarse)').matches;
+ if(mobile&&navigator.canShare&&navigator.canShare({files:[file]})){
+  try{await navigator.share({files:[file],title:name});return true}catch(e){if(e&&e.name==='AbortError')return false}
+ }
+ const u=URL.createObjectURL(blob);
+ const a=document.createElement('a');a.href=u;a.download=name;
+ document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),3000);
+ return true;
+}
+const fname=ext=>'xisaab-'+(period==='all'?'dhammaan':period)+'.'+ext;
+
+/* CSV */
+function buildCsv(v){
+ const q=s=>'"'+String(s).replace(/"/g,'""')+'"';
+ const L=[['Taariikh','Faahfaahin','Nooca','Dakhli','Kharash','Haraaga'].map(q).join(',')];
+ if(v.hasOpening)L.push([q(''),q('Haraaga hore'),q(''),'','',v.opening].join(','));
+ v.rows.forEach(r=>L.push([q(r.d),q(r.desc||''),q(r.type==='i'?'Dakhli':'Kharash'),r.type==='i'?r.amt:'',r.type==='e'?r.amt:'',r.bal].join(',')));
+ L.push([q(''),q('Wadarta'),q(''),v.inc,v.exp,v.closing].join(','));
+ return '\ufeff'+L.join('\r\n');
+}
+
+/* XLSX (no libraries, works offline) */
+const te=new TextEncoder();
+const CT=(()=>{const t=[];for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})();
+function crc32(b){let c=0xFFFFFFFF;for(let i=0;i<b.length;i++)c=CT[(c^b[i])&255]^(c>>>8);return (c^0xFFFFFFFF)>>>0}
+function zip(files){
+ const parts=[],cen=[];let off=0;
+ const u16=n=>[n&255,(n>>8)&255],u32=n=>[n&255,(n>>8)&255,(n>>16)&255,(n>>>24)&255];
+ files.forEach(fl=>{
+  const nm=te.encode(fl.name),d=te.encode(fl.data),c=crc32(d);
+  const lh=new Uint8Array([0x50,0x4b,3,4,...u16(20),...u16(0x0800),...u16(0),...u16(0),...u16(33),...u32(c),...u32(d.length),...u32(d.length),...u16(nm.length),...u16(0)]);
+  parts.push(lh,nm,d);
+  cen.push(new Uint8Array([0x50,0x4b,1,2,...u16(20),...u16(20),...u16(0x0800),...u16(0),...u16(0),...u16(33),...u32(c),...u32(d.length),...u32(d.length),...u16(nm.length),...u16(0),...u16(0),...u16(0),...u16(0),...u32(0),...u32(off)]),nm);
+  off+=lh.length+nm.length+d.length;
+ });
+ let cs=0;cen.forEach(x=>cs+=x.length);
+ const end=new Uint8Array([0x50,0x4b,5,6,...u16(0),...u16(0),...u16(files.length),...u16(files.length),...u32(cs),...u32(off),...u16(0)]);
+ return new Blob([...parts,...cen,end],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+}
+const X='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>';
+const NS='xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"';
+const cs_=(r,t,s)=>`<c r="${r}" t="inlineStr" s="${s||0}"><is><t xml:space="preserve">${esc(t)}</t></is></c>`;
+const cn_=(r,n,s)=>`<c r="${r}" s="${s||0}"><v>${n}</v></c>`;
+const cf_=(r,fm,n,s)=>`<c r="${r}" s="${s||0}"><f>${fm}</f><v>${n}</v></c>`;
+function sheet(rows,cols,freeze){
+ return X+`<worksheet ${NS}><sheetViews><sheetView workbookViewId="0"${freeze?' tabSelected="1"':''}>${freeze?'<pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"/>':''}</sheetView></sheetViews><cols>${cols.map((w,i)=>`<col min="${i+1}" max="${i+1}" width="${w}" customWidth="1"/>`).join('')}</cols><sheetData>${rows.map((r,i)=>`<row r="${i+1}">${r.join('')}</row>`).join('')}</sheetData></worksheet>`;
+}
+function buildXlsx(v){
+ // styles: 0 normal,1 header,2 date,3 number,4 bold number,5 bold text
+ const styles=X+`<styleSheet ${NS}><numFmts count="2"><numFmt numFmtId="164" formatCode="#,##0.00"/><numFmt numFmtId="165" formatCode="yyyy\\-mm\\-dd"/></numFmts><fonts count="3"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><color rgb="FFFFFFFF"/><name val="Calibri"/></font></fonts><fills count="3"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FF2456D6"/><bgColor indexed="64"/></patternFill></fill></fills><borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="6"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="2" fillId="2" borderId="0" xfId="0" applyFont="1" applyFill="1"/><xf numFmtId="165" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/><xf numFmtId="164" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/><xf numFmtId="164" fontId="1" fillId="0" borderId="0" xfId="0" applyNumberFormat="1" applyFont="1"/><xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1"/></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>`;
+ // Statement sheet
+ const H=['Taariikh','Faahfaahin','Nooca','Dakhli','Kharash','Haraaga'].map((t,i)=>cs_(String.fromCharCode(65+i)+'1',t,1));
+ const S=[H];let r=2,prev=null;
+ if(v.hasOpening){S.push([cs_('B2','Haraaga hore',5),cn_('F2',v.opening,4)]);prev=2;r=3}
+ v.rows.forEach(x=>{
+  const c=[cn_('A'+r,serial(x.d),2),cs_('B'+r,x.desc||''),cs_('C'+r,x.type==='i'?'Dakhli':'Kharash')];
+  if(x.type==='i')c.push(cn_('D'+r,x.amt,3));
+  if(x.type==='e')c.push(cn_('E'+r,x.amt,3));
+  c.push(cf_('F'+r,prev?`F${prev}+D${r}-E${r}`:`D${r}-E${r}`,x.bal,3));
+  S.push(c);prev=r;r++;
+ });
+ const first=v.hasOpening?3:2,last=r-1;
+ if(v.rows.length)S.push([cs_('B'+r,'Wadarta',5),cf_('D'+r,`SUM(D${first}:D${last})`,v.inc,4),cf_('E'+r,`SUM(E${first}:E${last})`,v.exp,4),cf_('F'+r,`F${last}`,v.closing,4)]);
+ // Summary sheet (by month, all data)
+ const M={};withBal().forEach(x=>{const k=x.d.slice(0,7);(M[k]=M[k]||{i:0,e:0})[x.type]+=x.amt});
+ const keys=Object.keys(M).sort();
+ const S2=[['Bisha','Dakhli','Kharash','Farqiga'].map((t,i)=>cs_(String.fromCharCode(65+i)+'1',t,1))];
+ let ti=0,te_=0;
+ keys.forEach((k,i)=>{const n=i+2,a=r2(M[k].i),b=r2(M[k].e);ti+=a;te_+=b;
+  S2.push([cs_('A'+n,mlabel(k)),cn_('B'+n,a,3),cn_('C'+n,b,3),cf_('D'+n,`B${n}-C${n}`,r2(a-b),3)])});
+ if(keys.length){const n=keys.length+2;S2.push([cs_('A'+n,'Wadarta',5),cf_('B'+n,`SUM(B2:B${n-1})`,r2(ti),4),cf_('C'+n,`SUM(C2:C${n-1})`,r2(te_),4),cf_('D'+n,`B${n}-C${n}`,r2(ti-te_),4)])}
+ return zip([
+  {name:'[Content_Types].xml',data:X+'<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/worksheets/sheet2.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/></Types>'},
+  {name:'_rels/.rels',data:X+'<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>'},
+  {name:'xl/workbook.xml',data:X+`<workbook ${NS} xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets><sheet name="Statement" sheetId="1" r:id="rId1"/><sheet name="Summary" sheetId="2" r:id="rId2"/></sheets></workbook>`},
+  {name:'xl/_rels/workbook.xml.rels',data:X+'<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet2.xml"/><Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>'},
+  {name:'xl/styles.xml',data:styles},
+  {name:'xl/worksheets/sheet1.xml',data:sheet(S,[13,34,11,15,15,16],true)},
+  {name:'xl/worksheets/sheet2.xml',data:sheet(S2,[22,16,16,16],true)}
+ ]);
+}
+$('bxl').onclick=async()=>{
+ const v=view();
+ if(!v.rows.length){$('bs').textContent='Wax xog ah ma jiraan';return}
+ if(await out(fname('xlsx'),buildXlsx(v)))$('bs').textContent='✓ Excel waa diyaar';
+};
+$('bcsv').onclick=async()=>{
+ const v=view();
+ if(!v.rows.length){$('bs').textContent='Wax xog ah ma jiraan';return}
+ if(await out(fname('csv'),new Blob([buildCsv(v)],{type:'text/csv'})))$('bs').textContent='✓ CSV waa diyaar';
+};
+$('bpdf').onclick=()=>window.print();
+$('bx').onclick=async()=>{
+ if(await out('xisaab-backup-'+isoOf(new Date())+'.json',new Blob([JSON.stringify(items)],{type:'application/json'})))$('bs').textContent='✓ Backup waa diyaar';
 };
 $('bm').onclick=()=>$('fi').click();
 $('fi').onchange=async ev=>{
@@ -111,13 +271,16 @@ $('fi').onchange=async ev=>{
   const arr=JSON.parse(await file.text());let n=0;
   for(const t of arr){
    if(!t||!t.id||!(t.amt>0)||(t.type!=='i'&&t.type!=='e'))continue;
-   if(!items.some(x=>x.id===Number(t.id))){items.push({id:Number(t.id),type:t.type,desc:String(t.desc||''),amt:Number(t.amt),date:String(t.date||'')});n++}
+   if(!items.some(x=>x.id===Number(t.id))){items.push({id:Number(t.id),type:t.type,desc:String(t.desc||''),amt:Number(t.amt),d:t.d||undefined});n++}
   }
   save();render();$('bs').textContent='✓ '+n+' xog ayaa la soo celiyay';
  }catch(e){$('bs').textContent='Faylkan ma saxna'}
  ev.target.value='';
 };
+
 try{items=JSON.parse(localStorage.getItem('xisaab')||'[]')}catch(e){items=[]}
+items.forEach(t=>{if(!t.d)t.d=isoOf(new Date(t.id))});
+$('dt').value=isoOf(new Date());
 $('st').textContent='Offline · xogtu waxay ku kaydsan tahay qalabkan';
 render();
 if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{})}
