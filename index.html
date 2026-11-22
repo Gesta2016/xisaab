@@ -104,6 +104,13 @@ h1{font-size:18px}
 .upd{display:flex;justify-content:space-between;align-items:center;gap:8px;background:var(--acc);color:#fff;padding:10px 12px;border-radius:12px;margin-bottom:10px;font-size:14px}
 .upd[hidden]{display:none}
 .upd button{border:0;border-radius:8px;padding:6px 12px;font-weight:700;background:#fff;color:var(--acc)}
+.sublbl{font-size:12px;color:var(--mut);margin:2px 0 6px}
+.subrow{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.schip{padding:7px 11px;border-radius:999px;border:1px solid var(--bd);background:var(--bg);color:var(--tx);font-size:13px}
+.schip.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.schip.add{border-style:dashed;color:var(--mut)}
+.sdel{font-style:normal;margin-left:6px;opacity:.7}
+small.cs{display:block;color:var(--mut);font-size:11px;white-space:normal}
 .pt{display:none}
 @media print{
  body{background:#fff;color:#000}
@@ -162,7 +169,7 @@ h1{font-size:18px}
 <input type="file" id="fi" accept=".json,application/json" hidden>
 <div id="bs"></div>
 </div>
-<div class="sub noprint" style="text-align:center;margin-top:8px">v4.0</div>
+<div class="sub noprint" style="text-align:center;margin-top:8px">v4.1</div>
 </main>
 <div class="sheet noprint" id="sheet" hidden>
 <div class="panel">
@@ -174,6 +181,8 @@ h1{font-size:18px}
 <input class="big" id="amt" type="number" inputmode="decimal" min="0" step="any" placeholder="0.00">
 <div class="cgrid" id="chips"></div>
 <div class="ncrow" id="newcat" hidden><input id="ncE" class="nce" maxlength="4" value="⭐"><input id="ncN" data-ph="catNamePh"><button type="button" id="ncB" class="ncb" data-i="addBtn"></button></div>
+<div id="subs"></div>
+<div class="ncrow" id="newsub" hidden><input id="nsN" data-ph="subNamePh"><button type="button" id="nsB" class="ncb" data-i="addBtn"></button></div>
 <input id="desc" data-ph="descPh">
 <input id="dt" type="date">
 <button class="add" id="add" type="button" data-i="save"></button>
@@ -216,22 +225,34 @@ const show=i=>i.slice(8,10)+'/'+i.slice(5,7)+'/'+i.slice(0,4);
 const serial=i=>Math.round(Date.UTC(+i.slice(0,4),+i.slice(5,7)-1,+i.slice(8,10))/864e5)+25569;
 const r2=n=>Math.round(n*100)/100;
 const T={
-so:{offReady:'Diyaar offline ah ✓ · xogtu waxay ku kaydsan tahay qalabkan',offWait:'Internet ku fur hal mar si offline loo diyaariyo',upd:'Nooca cusub waa diyaar',updBtn:'Cusboonaysii',country:"Dooro waddanka (lacagta)",title:'Nidaamka Xisaabta',balance:'Haraaga (Balance)',income:'Dakhliga',expense:'Kharashka',opening:'Haraaga hore',statement:'Statement',from:'Laga bilaabo (From)',to:'Ilaa (To)',thisMonth:'Bishaan',thisYear:'Sannadkan',all:'Dhammaan',start:'bilowga',today:'maanta',chart:'Chart',catExp:'Kharashka qaybaha',colDate:'Taariikh',colDesc:'Faahfaahin',colType:'Nooca',colCat:'Qaybta',colInc:'Dakhli',colExp:'Kharash',colBal:'Haraaga',typeInc:'Dakhli',typeExp:'Kharash',total:'Wadarta',newTx:'Macaamil cusub',addInc:'+ Dakhli',addExp:'− Kharash',descPh:'Faahfaahin (ikhtiyaari)',save:'Kaydi',print:'🖨 PDF / Print',restore:'⬆ Soo celi',noTx:'Wax macaamil ah ma jiraan muddadan',confirmDel:'Ma tirtirtaa?',offline:'Offline · xogtu waxay ku kaydsan tahay qalabkan',noData:'Wax xog ah ma jiraan',excelOk:'✓ Excel waa diyaar',csvOk:'✓ CSV waa diyaar',bkOk:'✓ Backup waa diyaar',restored:'✓ {n} xog ayaa la soo celiyay',badFile:'Faylkan ma saxna',saveErr:'Khalad: lama kaydin',sh1:'Statement',sh2:'Soo koobid',mMonth:'Bisha',mDiff:'Farqiga',
+so:{subLbl:'Qayb hoosaad (ikhtiyaari)',addSub:'Qayb hoosaad',subNamePh:'Magaca qaybta hoosaadka',colSub:'Qayb hoosaad',offReady:'Diyaar offline ah ✓ · xogtu waxay ku kaydsan tahay qalabkan',offWait:'Internet ku fur hal mar si offline loo diyaariyo',upd:'Nooca cusub waa diyaar',updBtn:'Cusboonaysii',country:"Dooro waddanka (lacagta)",title:'Nidaamka Xisaabta',balance:'Haraaga (Balance)',income:'Dakhliga',expense:'Kharashka',opening:'Haraaga hore',statement:'Statement',from:'Laga bilaabo (From)',to:'Ilaa (To)',thisMonth:'Bishaan',thisYear:'Sannadkan',all:'Dhammaan',start:'bilowga',today:'maanta',chart:'Chart',catExp:'Kharashka qaybaha',colDate:'Taariikh',colDesc:'Faahfaahin',colType:'Nooca',colCat:'Qaybta',colInc:'Dakhli',colExp:'Kharash',colBal:'Haraaga',typeInc:'Dakhli',typeExp:'Kharash',total:'Wadarta',newTx:'Macaamil cusub',addInc:'+ Dakhli',addExp:'− Kharash',descPh:'Faahfaahin (ikhtiyaari)',save:'Kaydi',print:'🖨 PDF / Print',restore:'⬆ Soo celi',noTx:'Wax macaamil ah ma jiraan muddadan',confirmDel:'Ma tirtirtaa?',offline:'Offline · xogtu waxay ku kaydsan tahay qalabkan',noData:'Wax xog ah ma jiraan',excelOk:'✓ Excel waa diyaar',csvOk:'✓ CSV waa diyaar',bkOk:'✓ Backup waa diyaar',restored:'✓ {n} xog ayaa la soo celiyay',badFile:'Faylkan ma saxna',saveErr:'Khalad: lama kaydin',sh1:'Statement',sh2:'Soo koobid',mMonth:'Bisha',mDiff:'Farqiga',
  mn:['Janaayo','Febraayo','Maarso','Abriil','Maajo','Juun','Luuliyo','Ogosto','Sebtembar','Oktoobar','Nofembar','Desembar'],
- addCat:'Qayb cusub',catNamePh:'Magaca qaybta',addBtn:'Ku dar',delCat:'Tirtir qaybtan?',cats:{'mushahar':'Mushahar','ganacsi':'Ganacsi','freelance':'Shaqo gaar ah','iibka':'Iib','kiro-dakhli':'Kiro la helay','hawlaad':'Hawlaad la helay','bonus':'Bonus','maalgashi':'Maalgashi','dib-celin':'Lacag soo laabatay','amaah':'Amaah la helay','hadiyad':'Hadiyad','dakhli-kale':'Kale','cunto':'Cunto','makhaayad':'Makhaayad','kiro':'Kiro','biil':'Biilal','telefoon':'Telefoon & Internet','gaadiid':'Gaadiid','shidaal':'Shidaal','caafimaad':'Caafimaad','waxbarasho':'Waxbarasho','iib':'Wax iibsasho','dharka':'Dhar','guri':'Guri & alaab','caruur':'Caruur & qoys','hawlaad-diray':'Lacag loo diray','sadaqo':'Sadaqo & Zakaat','madadaalo':'Madadaalo','safar':'Safar','deyn-bixin':'Bixinta deynta','ganacsi-kharash':'Kharashka ganacsiga','cashuur':'Cashuur & khidmad','kharash-kale':'Kale'}},
-en:{offReady:'Ready offline ✓ · data is stored on this device',offWait:'Open once online to enable offline use',upd:'New version available',updBtn:'Update',country:"Choose country (currency)",title:'Accounting System',balance:'Balance',income:'Income',expense:'Expenses',opening:'Opening balance',statement:'Statement',from:'From',to:'To',thisMonth:'This month',thisYear:'This year',all:'All',start:'start',today:'today',chart:'Chart',catExp:'Expenses by category',colDate:'Date',colDesc:'Description',colType:'Type',colCat:'Category',colInc:'Income',colExp:'Expense',colBal:'Balance',typeInc:'Income',typeExp:'Expense',total:'Total',newTx:'New transaction',addInc:'+ Income',addExp:'− Expense',descPh:'Description (optional)',save:'Save',print:'🖨 PDF / Print',restore:'⬆ Restore',noTx:'No transactions in this period',confirmDel:'Delete this?',offline:'Offline · data is stored on this device',noData:'No data',excelOk:'✓ Excel is ready',csvOk:'✓ CSV is ready',bkOk:'✓ Backup is ready',restored:'✓ {n} records restored',badFile:'Invalid file',saveErr:'Error: could not save',sh1:'Statement',sh2:'Summary',mMonth:'Month',mDiff:'Difference',
+ addCat:'Qayb cusub',catNamePh:'Magaca qaybta',addBtn:'Ku dar',delCat:'Tirtir qaybtan?',cats:{'mushahar':'Mushahar','ganacsi':'Ganacsi','freelance':'Shaqo gaar ah','iibka':'Iib','kiro-dakhli':'Kiro la helay','hawlaad':'Hawlaad la helay','bonus':'Bonus','maalgashi':'Maalgashi','dib-celin':'Lacag soo laabatay','amaah':'Amaah la helay','hadiyad':'Hadiyad','dakhli-kale':'Kale','cunto':'Cunto','makhaayad':'Makhaayad','kiro':'Kiro','biil':'Biilal','telefoon':'Telefoon & Internet','gaadiid':'Gaadiid','shidaal':'Shidaal','caafimaad':'Caafimaad','waxbarasho':'Waxbarasho','iib':'Wax iibsasho','dharka':'Dhar','guri':'Guri & alaab','caruur':'Caruur & qoys','hawlaad-diray':'Lacag loo diray','sadaqo':'Sadaqo & Zakaat','madadaalo':'Madadaalo','safar':'Safar','deyn-bixin':'Bixinta deynta','ganacsi-kharash':'Kharashka ganacsiga','cashuur':'Cashuur & khidmad','shaqaale':'Shaqaale','kharash-kale':'Kale'}},
+en:{subLbl:'Subcategory (optional)',addSub:'Subcategory',subNamePh:'Subcategory name',colSub:'Subcategory',offReady:'Ready offline ✓ · data is stored on this device',offWait:'Open once online to enable offline use',upd:'New version available',updBtn:'Update',country:"Choose country (currency)",title:'Accounting System',balance:'Balance',income:'Income',expense:'Expenses',opening:'Opening balance',statement:'Statement',from:'From',to:'To',thisMonth:'This month',thisYear:'This year',all:'All',start:'start',today:'today',chart:'Chart',catExp:'Expenses by category',colDate:'Date',colDesc:'Description',colType:'Type',colCat:'Category',colInc:'Income',colExp:'Expense',colBal:'Balance',typeInc:'Income',typeExp:'Expense',total:'Total',newTx:'New transaction',addInc:'+ Income',addExp:'− Expense',descPh:'Description (optional)',save:'Save',print:'🖨 PDF / Print',restore:'⬆ Restore',noTx:'No transactions in this period',confirmDel:'Delete this?',offline:'Offline · data is stored on this device',noData:'No data',excelOk:'✓ Excel is ready',csvOk:'✓ CSV is ready',bkOk:'✓ Backup is ready',restored:'✓ {n} records restored',badFile:'Invalid file',saveErr:'Error: could not save',sh1:'Statement',sh2:'Summary',mMonth:'Month',mDiff:'Difference',
  mn:['January','February','March','April','May','June','July','August','September','October','November','December'],
- addCat:'New category',catNamePh:'Category name',addBtn:'Add',delCat:'Delete this category?',cats:{'mushahar':'Salary','ganacsi':'Business','freelance':'Freelance','iibka':'Sales','kiro-dakhli':'Rental income','hawlaad':'Money received','bonus':'Bonus','maalgashi':'Investment','dib-celin':'Refund','amaah':'Loan received','hadiyad':'Gifts','dakhli-kale':'Other','cunto':'Food','makhaayad':'Eating out','kiro':'Rent','biil':'Bills','telefoon':'Phone & Internet','gaadiid':'Transport','shidaal':'Fuel','caafimaad':'Health','waxbarasho':'Education','iib':'Shopping','dharka':'Clothing','guri':'Home','caruur':'Kids & family','hawlaad-diray':'Money sent','sadaqo':'Charity & Zakat','madadaalo':'Entertainment','safar':'Travel','deyn-bixin':'Debt payment','ganacsi-kharash':'Business costs','cashuur':'Taxes & fees','kharash-kale':'Other'}},
-no:{offReady:'Klar for frakoblet bruk ✓ · data lagres på denne enheten',offWait:'Åpne én gang med nett for å bruke frakoblet',upd:'Ny versjon tilgjengelig',updBtn:'Oppdater',country:"Velg land (valuta)",title:'Regnskapssystem',balance:'Saldo',income:'Inntekt',expense:'Utgifter',opening:'Inngående saldo',statement:'Kontoutskrift',from:'Fra',to:'Til',thisMonth:'Denne måneden',thisYear:'I år',all:'Alle',start:'start',today:'i dag',chart:'Diagram',catExp:'Utgifter per kategori',colDate:'Dato',colDesc:'Beskrivelse',colType:'Type',colCat:'Kategori',colInc:'Inntekt',colExp:'Utgift',colBal:'Saldo',typeInc:'Inntekt',typeExp:'Utgift',total:'Sum',newTx:'Ny transaksjon',addInc:'+ Inntekt',addExp:'− Utgift',descPh:'Beskrivelse (valgfritt)',save:'Lagre',print:'🖨 PDF / Skriv ut',restore:'⬆ Gjenopprett',noTx:'Ingen transaksjoner i denne perioden',confirmDel:'Slette denne?',offline:'Frakoblet · data lagres på denne enheten',noData:'Ingen data',excelOk:'✓ Excel er klar',csvOk:'✓ CSV er klar',bkOk:'✓ Sikkerhetskopi er klar',restored:'✓ {n} poster gjenopprettet',badFile:'Ugyldig fil',saveErr:'Feil: kunne ikke lagre',sh1:'Kontoutskrift',sh2:'Oppsummering',mMonth:'Måned',mDiff:'Differanse',
+ addCat:'New category',catNamePh:'Category name',addBtn:'Add',delCat:'Delete this category?',cats:{'mushahar':'Salary','ganacsi':'Business','freelance':'Freelance','iibka':'Sales','kiro-dakhli':'Rental income','hawlaad':'Money received','bonus':'Bonus','maalgashi':'Investment','dib-celin':'Refund','amaah':'Loan received','hadiyad':'Gifts','dakhli-kale':'Other','cunto':'Food','makhaayad':'Eating out','kiro':'Rent','biil':'Bills','telefoon':'Phone & Internet','gaadiid':'Transport','shidaal':'Fuel','caafimaad':'Health','waxbarasho':'Education','iib':'Shopping','dharka':'Clothing','guri':'Home','caruur':'Kids & family','hawlaad-diray':'Money sent','sadaqo':'Charity & Zakat','madadaalo':'Entertainment','safar':'Travel','deyn-bixin':'Debt payment','ganacsi-kharash':'Business costs','cashuur':'Taxes & fees','shaqaale':'Staff & wages','kharash-kale':'Other'}},
+no:{subLbl:'Underkategori (valgfritt)',addSub:'Underkategori',subNamePh:'Navn på underkategori',colSub:'Underkategori',offReady:'Klar for frakoblet bruk ✓ · data lagres på denne enheten',offWait:'Åpne én gang med nett for å bruke frakoblet',upd:'Ny versjon tilgjengelig',updBtn:'Oppdater',country:"Velg land (valuta)",title:'Regnskapssystem',balance:'Saldo',income:'Inntekt',expense:'Utgifter',opening:'Inngående saldo',statement:'Kontoutskrift',from:'Fra',to:'Til',thisMonth:'Denne måneden',thisYear:'I år',all:'Alle',start:'start',today:'i dag',chart:'Diagram',catExp:'Utgifter per kategori',colDate:'Dato',colDesc:'Beskrivelse',colType:'Type',colCat:'Kategori',colInc:'Inntekt',colExp:'Utgift',colBal:'Saldo',typeInc:'Inntekt',typeExp:'Utgift',total:'Sum',newTx:'Ny transaksjon',addInc:'+ Inntekt',addExp:'− Utgift',descPh:'Beskrivelse (valgfritt)',save:'Lagre',print:'🖨 PDF / Skriv ut',restore:'⬆ Gjenopprett',noTx:'Ingen transaksjoner i denne perioden',confirmDel:'Slette denne?',offline:'Frakoblet · data lagres på denne enheten',noData:'Ingen data',excelOk:'✓ Excel er klar',csvOk:'✓ CSV er klar',bkOk:'✓ Sikkerhetskopi er klar',restored:'✓ {n} poster gjenopprettet',badFile:'Ugyldig fil',saveErr:'Feil: kunne ikke lagre',sh1:'Kontoutskrift',sh2:'Oppsummering',mMonth:'Måned',mDiff:'Differanse',
  mn:['Januar','Februar','Mars','April','Mai','Juni','Juli','August','September','Oktober','November','Desember'],
- addCat:'Ny kategori',catNamePh:'Kategorinavn',addBtn:'Legg til',delCat:'Slette denne kategorien?',cats:{'mushahar':'Lønn','ganacsi':'Forretning','freelance':'Frilans','iibka':'Salg','kiro-dakhli':'Leieinntekt','hawlaad':'Mottatte penger','bonus':'Bonus','maalgashi':'Investering','dib-celin':'Refusjon','amaah':'Lån mottatt','hadiyad':'Gaver','dakhli-kale':'Annet','cunto':'Mat','makhaayad':'Spise ute','kiro':'Husleie','biil':'Regninger','telefoon':'Telefon og internett','gaadiid':'Transport','shidaal':'Drivstoff','caafimaad':'Helse','waxbarasho':'Utdanning','iib':'Shopping','dharka':'Klær','guri':'Hjem','caruur':'Barn og familie','hawlaad-diray':'Penger sendt','sadaqo':'Veldedighet og zakat','madadaalo':'Underholdning','safar':'Reise','deyn-bixin':'Gjeldsbetaling','ganacsi-kharash':'Forretningsutgifter','cashuur':'Skatt og gebyrer','kharash-kale':'Annet'}}
+ addCat:'Ny kategori',catNamePh:'Kategorinavn',addBtn:'Legg til',delCat:'Slette denne kategorien?',cats:{'mushahar':'Lønn','ganacsi':'Forretning','freelance':'Frilans','iibka':'Salg','kiro-dakhli':'Leieinntekt','hawlaad':'Mottatte penger','bonus':'Bonus','maalgashi':'Investering','dib-celin':'Refusjon','amaah':'Lån mottatt','hadiyad':'Gaver','dakhli-kale':'Annet','cunto':'Mat','makhaayad':'Spise ute','kiro':'Husleie','biil':'Regninger','telefoon':'Telefon og internett','gaadiid':'Transport','shidaal':'Drivstoff','caafimaad':'Helse','waxbarasho':'Utdanning','iib':'Shopping','dharka':'Klær','guri':'Hjem','caruur':'Barn og familie','hawlaad-diray':'Penger sendt','sadaqo':'Veldedighet og zakat','madadaalo':'Underholdning','safar':'Reise','deyn-bixin':'Gjeldsbetaling','ganacsi-kharash':'Forretningsutgifter','cashuur':'Skatt og gebyrer','shaqaale':'Ansatte og lønn','kharash-kale':'Annet'}}
 };
 let LG='so';try{LG=localStorage.getItem('xisaab_lang')||'so';if(!T[LG])LG='so'}catch(e){}
 const tr=(k,p)=>{let x=T[LG][k]||T.en[k]||k;if(p)for(const y in p)x=x.replace('{'+y+'}',p[y]);return x};
 const mn=()=>T[LG].mn;
 const mlabel=p=>mn()[+p.slice(5)-1]+' '+p.slice(0,4);
-const CATS={i:[{k:'mushahar',ic:'💼'},{k:'ganacsi',ic:'📈'},{k:'freelance',ic:'💻'},{k:'iibka',ic:'🏷'},{k:'kiro-dakhli',ic:'🏘'},{k:'hawlaad',ic:'💸'},{k:'bonus',ic:'⭐'},{k:'maalgashi',ic:'📊'},{k:'dib-celin',ic:'↩️'},{k:'amaah',ic:'🏦'},{k:'hadiyad',ic:'🎁'},{k:'dakhli-kale',ic:'➕'}],e:[{k:'cunto',ic:'🍽'},{k:'makhaayad',ic:'🍔'},{k:'kiro',ic:'🏠'},{k:'biil',ic:'💡'},{k:'telefoon',ic:'📱'},{k:'gaadiid',ic:'🚗'},{k:'shidaal',ic:'⛽'},{k:'caafimaad',ic:'💊'},{k:'waxbarasho',ic:'🎓'},{k:'iib',ic:'🛍'},{k:'dharka',ic:'👕'},{k:'guri',ic:'🛋'},{k:'caruur',ic:'👶'},{k:'hawlaad-diray',ic:'📤'},{k:'sadaqo',ic:'🤲'},{k:'madadaalo',ic:'🎬'},{k:'safar',ic:'✈️'},{k:'deyn-bixin',ic:'🏦'},{k:'ganacsi-kharash',ic:'🛠'},{k:'cashuur',ic:'🧾'},{k:'kharash-kale',ic:'➖'}]};
+const CATS={i:[{k:'mushahar',ic:'💼'},{k:'ganacsi',ic:'📈'},{k:'freelance',ic:'💻'},{k:'iibka',ic:'🏷'},{k:'kiro-dakhli',ic:'🏘'},{k:'hawlaad',ic:'💸'},{k:'bonus',ic:'⭐'},{k:'maalgashi',ic:'📊'},{k:'dib-celin',ic:'↩️'},{k:'amaah',ic:'🏦'},{k:'hadiyad',ic:'🎁'},{k:'dakhli-kale',ic:'➕'}],e:[{k:'cunto',ic:'🍽'},{k:'makhaayad',ic:'🍔'},{k:'kiro',ic:'🏠'},{k:'biil',ic:'💡'},{k:'telefoon',ic:'📱'},{k:'gaadiid',ic:'🚗'},{k:'shidaal',ic:'⛽'},{k:'caafimaad',ic:'💊'},{k:'waxbarasho',ic:'🎓'},{k:'iib',ic:'🛍'},{k:'dharka',ic:'👕'},{k:'guri',ic:'🛋'},{k:'caruur',ic:'👶'},{k:'hawlaad-diray',ic:'📤'},{k:'sadaqo',ic:'🤲'},{k:'madadaalo',ic:'🎬'},{k:'safar',ic:'✈️'},{k:'deyn-bixin',ic:'🏦'},{k:'ganacsi-kharash',ic:'🛠'},{k:'cashuur',ic:'🧾'},{k:'shaqaale',ic:'👷'},{k:'kharash-kale',ic:'➖'}]};
 let CC={i:[],e:[]};try{const x=JSON.parse(localStorage.getItem('xisaab_cc')||'null');if(x){CC.i=x.i||[];CC.e=x.e||[]}}catch(e){}
+const SUBS={'mushahar':[['basic','Mushahar rasmi','Basic salary','Grunnlønn'],['overtime','Saacado dheeri ah','Overtime','Overtid'],['allow','Kabo','Allowance','Tillegg']],'ganacsi':[['sales','Iib','Sales','Salg'],['services','Adeeg','Services','Tjenester'],['commission','Komishan','Commission','Provisjon']],'hawlaad':[['family','Qoyska','Family','Familie'],['friends','Asxaab','Friends','Venner'],['org','Ururka','Organisation','Organisasjon']],'cunto':[['raashin','Raashin','Groceries','Dagligvarer'],['hilib','Hilib & kalluun','Meat & fish','Kjøtt og fisk'],['khudaar','Khudaar & miro','Vegetables & fruit','Grønnsaker og frukt'],['caano','Caano & rooti','Dairy & bread','Meieri og brød']],'makhaayad':[['casho','Makhaayad','Restaurant','Restaurant'],['kafee','Kafee','Café','Kafé'],['fast','Fast food','Fast food','Hurtigmat'],['delivery','Keenid','Delivery','Levering']],'kiro':[['guriga','Kirada guriga','House rent','Husleie'],['dukaan','Dukaan / xafiis','Shop / office','Butikk / kontor'],['dammaanad','Dammaanad','Deposit','Depositum']],'biil':[['koronto','Koronto','Electricity','Strøm'],['biyo','Biyo','Water','Vann'],['gaas','Gaas','Gas','Gass'],['internet','Internet','Internet','Internett'],['qashin','Qashin','Waste','Avfall'],['tv','TV / Kaabal','TV / Cable','TV / Kabel']],'telefoon':[['airtime','Airtime','Airtime','Taletid'],['data','Data','Mobile data','Mobildata'],['wifi','WiFi guriga','Home WiFi','Hjemme-WiFi']],'gaadiid':[['bas','Bas / Taksi','Bus / Taxi','Buss / Drosje'],['tikidh','Tikidh','Tickets','Billetter'],['dayactir','Dayactir gaadhi','Car repair','Bilreparasjon'],['baarkin','Baarkin','Parking','Parkering'],['caymis','Caymis','Insurance','Forsikring']],'shidaal':[['baatrool','Baatrool','Petrol','Bensin'],['diisal','Diisal','Diesel','Diesel']],'caafimaad':[['dhakhtar','Dhakhtar','Doctor','Lege'],['dawo','Dawo','Medicine','Medisin'],['isbitaal','Isbitaal','Hospital','Sykehus'],['ilko','Ilkaha','Dental','Tannlege'],['caymis-c','Caymis caafimaad','Health insurance','Helseforsikring']],'waxbarasho':[['fee','Fiiga dugsiga','School fees','Skolepenger'],['buug','Buugaag','Books','Bøker'],['unifoom','Unifoom','Uniform','Uniform'],['koorso','Koorso','Courses','Kurs']],'guri':[['alaab','Alaab guri','Furniture','Møbler'],['dayactir-g','Dayactir','Repairs','Reparasjoner'],['nadiifin','Nadiifin','Cleaning','Rengjøring'],['qalab','Qalab korontada','Appliances','Apparater']],'shaqaale':[['guri-s','Shaqaale guri','Household staff','Husholdning'],['waardiye','Waardiye','Security guard','Vakt'],['darawal','Darawal','Driver','Sjåfør'],['karraani','Karraani / Kariye','Cook / nanny','Kokk / barnepasser'],['shaqaale-g','Mushahar shaqaale','Staff wages','Ansattlønn']],'dharka':[['rag','Rag','Men','Menn'],['dumar','Dumar','Women','Kvinner'],['caruur-d','Caruur','Kids','Barn'],['kab','Kabo','Shoes','Sko']],'caruur':[['dugsi','Dugsi','School','Skole'],['ciyaar','Ciyaaraha','Toys','Leker'],['dhar-c','Dhar','Clothes','Klær'],['daryeel','Daryeel','Childcare','Barnepass']],'hawlaad-diray':[['qoys','Qoyska','Family','Familie'],['asxaab','Asxaab','Friends','Venner'],['ganacsi-h','Ganacsi','Business','Forretning']],'sadaqo':[['sadaqo','Sadaqo','Charity','Veldedighet'],['zakaat','Zakaat','Zakat','Zakat'],['masjid','Masjid','Mosque','Moské'],['waqaf','Waqaf','Endowment','Wakf']],'madadaalo':[['filim','Filim','Movies','Filmer'],['ciyaar-m','Ciyaaro','Games','Spill'],['rukun','Rukunno (Netflix...)','Subscriptions','Abonnement'],['isboorti','Isboorti','Sports','Sport']],'safar':[['duulimaad','Duulimaad','Flights','Flyreiser'],['hudheel','Hudheel','Hotel','Hotell'],['fiisa','Fiisaha','Visa','Visum']],'ganacsi-kharash':[['alaab-g','Alaab (stock)','Stock','Varelager'],['shaqaale-b','Mushahar','Wages','Lønn'],['kiro-b','Kiro','Rent','Leie'],['suuqgeyn','Suuq-geyn','Marketing','Markedsføring']],'cashuur':[['cashuur-d','Cashuur dakhli','Income tax','Inntektsskatt'],['cashuur-g','Cashuurta guriga','Property tax','Eiendomsskatt'],['bangi','Khidmadda bangiga','Bank fees','Bankgebyr'],['ruqsad','Ruqsad','Licenses','Lisenser']]};
+let CS={};try{CS=JSON.parse(localStorage.getItem('xisaab_cs')||'{}')||{}}catch(e){CS={}}
+const saveCS=()=>{try{localStorage.setItem('xisaab_cs',JSON.stringify(CS))}catch(e){}};
+const li=()=>({so:1,en:2,no:3})[LG]||1;
+const subsOf=k=>[...(SUBS[k]||[]).map(x=>({k:x[0],n:x[li()]})),...(CS[k]||[]).map(x=>({k:x.k,n:x.n,custom:1}))];
+const subName=t=>{if(!t.s)return '';const x=subsOf(t.c).find(y=>y.k===t.s);return x?x.n:''};
+const lbl=r=>{const c=cat(r),sn=subName(r);return {ic:c.ic,main:r.desc||(sn?c.n+' › '+sn:c.n),small:r.desc?(c.n+(sn?' › '+sn:'')):''}};
+let ss='',lastSc='';
+function subsUi(){
+ if(lastSc!==sc){ss='';lastSc=sc;$('newsub').hidden=true}
+ $('subs').innerHTML=`<div class="sublbl">${esc(tr('subLbl'))}</div><div class="subrow">`+subsOf(sc).map(x=>`<button type="button" class="schip${x.k===ss?' on':''}" data-s="${x.k}">${esc(x.n)}${x.custom?`<i class="sdel" data-sdel="${x.k}">×</i>`:''}</button>`).join('')+`<button type="button" class="schip add" data-sadd="1">＋ ${esc(tr('addSub'))}</button></div>`;
+}
 const saveCC=()=>{try{localStorage.setItem('xisaab_cc',JSON.stringify(CC))}catch(e){}};
 const catsOf=ty=>{const b=CATS[ty];return [...b.slice(0,-1),...CC[ty],b[b.length-1]]};
 const cn=c=>c.n||T[LG].cats[c.k]||c.k;
@@ -268,9 +289,9 @@ function charts(v){
   const cx=gap*i+gap/2,hi=M[k].i/mx*88,he=M[k].e/mx*88;
   bars+=`<rect class="bi" x="${(cx-bw-1).toFixed(1)}" y="${(100-hi).toFixed(1)}" width="${bw.toFixed(1)}" height="${hi.toFixed(1)}" rx="3"/><rect class="be" x="${(cx+1).toFixed(1)}" y="${(100-he).toFixed(1)}" width="${bw.toFixed(1)}" height="${he.toFixed(1)}" rx="3"/><text x="${cx.toFixed(1)}" y="118" text-anchor="middle">${mn()[+k.slice(5)-1].slice(0,3)}</text>`;
  });
- const C={};v.rows.filter(r=>r.type==='e').forEach(r=>{const c=cat(r),key=c.ic+' '+c.n;C[key]=(C[key]||0)+r.amt});
+ const C={},CSb={};v.rows.filter(r=>r.type==='e').forEach(r=>{const c=cat(r),key=c.ic+' '+c.n;C[key]=(C[key]||0)+r.amt;const sn=subName(r);if(sn){(CSb[key]=CSb[key]||{})[sn]=(CSb[key][sn]||0)+r.amt}});
  const cs=Object.entries(C).sort((a,b)=>b[1]-a[1]).slice(0,5),cm=cs.length?cs[0][1]:1;
- el.innerHTML=`<b>${tr('chart')}</b><svg viewBox="0 0 ${W} ${H}" class="svg">${bars}</svg><div class="lg"><span><i class="d bi"></i>${tr('colInc')}</span><span><i class="d be"></i>${tr('colExp')}</span></div>`+(cs.length?`<b style="display:block;margin:12px 0 6px">${tr('catExp')}</b>`+cs.map(([n,a])=>`<div class="cb"><div class="cl"><span>${esc(n)}</span><span>${f(r2(a))}</span></div><div class="ct"><div class="cf" style="width:${Math.round(a/cm*100)}%"></div></div></div>`).join(''):'');
+ el.innerHTML=`<b>${tr('chart')}</b><svg viewBox="0 0 ${W} ${H}" class="svg">${bars}</svg><div class="lg"><span><i class="d bi"></i>${tr('colInc')}</span><span><i class="d be"></i>${tr('colExp')}</span></div>`+(cs.length?`<b style="display:block;margin:12px 0 6px">${tr('catExp')}</b>`+cs.map(([n,a])=>`<div class="cb"><div class="cl"><span>${esc(n)}</span><span>${f(r2(a))}</span></div><div class="ct"><div class="cf" style="width:${Math.round(a/cm*100)}%"></div></div>${CSb[n]?`<small class="cs">${Object.entries(CSb[n]).sort((x,y)=>y[1]-x[1]).map(([k,v2])=>esc(k)+' '+f(r2(v2))).join(' · ')}</small>`:''}</div>`).join(''):'');
 }
 function curUi(){const c=CTR.find(x=>x[0]===CUR);$('curbtn').textContent=c[1]+' '+CUR+' ▾'}
 function openCur(){
@@ -291,15 +312,15 @@ function render(){
   const rr=v.rows.filter(r=>r.type===vw).reverse();
   if(!rr.length){$('list').innerHTML=`<div class="empty">${tr('noTx')}</div>`;return}
   const tot=r2(rr.reduce((a,r)=>a+r.amt,0)),cl=vw==='i'?'inc':'exp';
-  const tb=rr.map(r=>`<tr><td>${show(r.d)}</td><td class="ds">${esc(r.desc||'')}</td><td>${cat(r).ic} ${cat(r).n}</td><td class="r ${cl}"><b>${f(r.amt)}</b></td><td><button class="del" data-id="${r.id}" type="button">✕</button></td></tr>`).join('');
+  const tb=rr.map(r=>`<tr><td>${show(r.d)}</td><td class="ds">${esc(r.desc||'')}</td><td>${cat(r).ic} ${esc(cat(r).n+(subName(r)?' › '+subName(r):''))}</td><td class="r ${cl}"><b>${f(r.amt)}</b></td><td><button class="del" data-id="${r.id}" type="button">✕</button></td></tr>`).join('');
   $('list').innerHTML=`<table><thead><tr><th>${tr('colDate')}</th><th>${tr('colDesc')}</th><th>${tr('colCat')}</th><th class="r">${tr(vw==='i'?'colInc':'colExp')} (${CUR})</th><th></th></tr></thead><tbody>${tb}<tr class="op"><td></td><td><b>${tr('total')}</b></td><td></td><td class="r ${cl}"><b>${f(tot)}</b></td><td></td></tr></tbody></table>`;
   return;
  }
- const body=v.rows.slice().reverse().map(r=>`<tr><td>${show(r.d)}</td><td class="ds">${cat(r).ic} ${esc(r.desc||cat(r).n)}</td><td class="r inc">${r.type==='i'?f(r.amt):''}</td><td class="r exp">${r.type==='e'?f(r.amt):''}</td><td class="r"><b>${f(r.bal)}</b></td><td><button class="del" data-id="${r.id}" type="button">✕</button></td></tr>`).join('');
+ const body=v.rows.slice().reverse().map(r=>`<tr><td>${show(r.d)}</td><td class="ds">${lbl(r).ic} ${esc(lbl(r).main)}${lbl(r).small?`<small class="cs">${esc(lbl(r).small)}</small>`:''}</td><td class="r inc">${r.type==='i'?f(r.amt):''}</td><td class="r exp">${r.type==='e'?f(r.amt):''}</td><td class="r"><b>${f(r.bal)}</b></td><td><button class="del" data-id="${r.id}" type="button">✕</button></td></tr>`).join('');
  const op=v.hasOpening?`<tr class="op"><td></td><td>${tr('opening')}</td><td></td><td></td><td class="r">${f(v.opening)}</td><td></td></tr>`:'';
  $('list').innerHTML=`<table><thead><tr><th>${tr('colDate')}</th><th>${tr('colDesc')}</th><th class="r">${tr('colInc')} (${CUR})</th><th class="r">${tr('colExp')} (${CUR})</th><th class="r">${tr('colBal')} (${CUR})</th><th></th></tr></thead><tbody>${body}${op}</tbody></table>`;
 }
-function chips(){$('chips').innerHTML=catsOf(type).map(c=>`<button type="button" class="ctile${c.k===sc?' on':''}" data-k="${c.k}"><span class="ci">${c.ic}</span><span class="cnm">${esc(cn(c))}</span>${c.n?`<i class="cdel" data-del="${c.k}">×</i>`:''}</button>`).join('')+`<button type="button" class="ctile add" data-add="1"><span class="ci">＋</span><span class="cnm">${esc(tr('addCat'))}</span></button>`}
+function chips(){subsUi();$('chips').innerHTML=catsOf(type).map(c=>`<button type="button" class="ctile${c.k===sc?' on':''}" data-k="${c.k}"><span class="ci">${c.ic}</span><span class="cnm">${esc(cn(c))}</span>${c.n?`<i class="cdel" data-del="${c.k}">×</i>`:''}</button>`).join('')+`<button type="button" class="ctile add" data-add="1"><span class="ci">＋</span><span class="cnm">${esc(tr('addCat'))}</span></button>`}
 function setType(t){type=t;$('newcat').hidden=true;sc=CATS[t][0].k;$('bi').classList.toggle('on',t==='i');$('be').classList.toggle('on',t==='e');chips()}
 function openSheet(){setType(type);$('dt').value=isoOf(new Date());$('desc').value='';$('amt').value='';$('sheet').hidden=false;setTimeout(()=>$('amt').focus(),60)}
 function closeSheet(){$('sheet').hidden=true}
@@ -310,6 +331,17 @@ $('chips').onclick=e=>{
  if(del){if(confirm(tr('delCat'))){const k=del.dataset.del;CC[type]=CC[type].filter(x=>x.k!==k);saveCC();if(sc===k)sc=CATS[type][0].k;chips();render()}return}
  if(e.target.closest('[data-add]')){const r=$('newcat');r.hidden=!r.hidden;if(!r.hidden)$('ncN').focus();return}
  const k=e.target.closest('.ctile');if(k){sc=k.dataset.k;chips()}
+};
+$('subs').onclick=e=>{
+ const del=e.target.closest('[data-sdel]');
+ if(del){if(confirm(tr('confirmDel'))){const k=del.dataset.sdel;CS[sc]=(CS[sc]||[]).filter(x=>x.k!==k);saveCS();if(ss===k)ss='';subsUi();render()}return}
+ if(e.target.closest('[data-sadd]')){const r=$('newsub');r.hidden=!r.hidden;if(!r.hidden)$('nsN').focus();return}
+ const b=e.target.closest('.schip');if(b){ss=ss===b.dataset.s?'':b.dataset.s;subsUi()}
+};
+$('nsB').onclick=()=>{
+ const n=$('nsN').value.trim();if(!n){$('nsN').focus();return}
+ const k='s'+Date.now();(CS[sc]=CS[sc]||[]).push({k,n});saveCS();
+ ss=k;$('nsN').value='';$('newsub').hidden=true;subsUi();
 };
 $('ncB').onclick=()=>{
  const n=$('ncN').value.trim();if(!n){$('ncN').focus();return}
@@ -324,7 +356,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeSheet();closeC
 $('add').onclick=()=>{
  const a=parseFloat($('amt').value);
  if(!a||a<=0){$('amt').focus();return}
- items.push({id:Date.now(),type,c:sc,desc:$('desc').value.trim(),amt:a,d:$('dt').value||isoOf(new Date())});
+ items.push({id:Date.now(),type,c:sc,s:ss||undefined,desc:$('desc').value.trim(),amt:a,d:$('dt').value||isoOf(new Date())});
  save();render();closeSheet();
 };
 function setView(x){vw=x;$('tS').classList.toggle('on',x==='st');$('tI').classList.toggle('on',x==='i');$('tE').classList.toggle('on',x==='e');render()}
@@ -360,10 +392,10 @@ const fname=ext=>'xisaab-'+((from||to)?(from||'bilow')+'_'+(to||'hadda'):'dhamma
 /* CSV */
 function buildCsv(v){
  const q=s=>'"'+String(s).replace(/"/g,'""')+'"';
- const L=[['colDate','colDesc','colType','colInc','colExp','colBal','colCat'].map(k=>q(tr(k)+(['colInc','colExp','colBal'].includes(k)?' ('+CUR+')':''))).join(',')];
- if(v.hasOpening)L.push([q(''),q(tr('opening')),q(''),'','',v.opening,q('')].join(','));
- v.rows.forEach(r=>L.push([q(r.d),q(r.desc||''),q(r.type==='i'?tr('typeInc'):tr('typeExp')),r.type==='i'?r.amt:'',r.type==='e'?r.amt:'',r.bal,q(cat(r).n)].join(',')));
- L.push([q(''),q(tr('total')),q(''),v.inc,v.exp,v.closing,q('')].join(','));
+ const L=[['colDate','colDesc','colType','colInc','colExp','colBal','colCat','colSub'].map(k=>q(tr(k)+(['colInc','colExp','colBal'].includes(k)?' ('+CUR+')':''))).join(',')];
+ if(v.hasOpening)L.push([q(''),q(tr('opening')),q(''),'','',v.opening,q(''),q('')].join(','));
+ v.rows.forEach(r=>L.push([q(r.d),q(r.desc||''),q(r.type==='i'?tr('typeInc'):tr('typeExp')),r.type==='i'?r.amt:'',r.type==='e'?r.amt:'',r.bal,q(cat(r).n),q(subName(r))].join(',')));
+ L.push([q(''),q(tr('total')),q(''),v.inc,v.exp,v.closing,q(''),q('')].join(','));
  return '\ufeff'+L.join('\r\n');
 }
 
@@ -397,7 +429,7 @@ function buildXlsx(v){
  // styles: 0 normal,1 header,2 date,3 number,4 bold number,5 bold text
  const styles=X+`<styleSheet ${NS}><numFmts count="2"><numFmt numFmtId="164" formatCode="${esc(CURS[CUR])}"/><numFmt numFmtId="165" formatCode="yyyy\\-mm\\-dd"/></numFmts><fonts count="3"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><color rgb="FFFFFFFF"/><name val="Calibri"/></font></fonts><fills count="3"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FF2456D6"/><bgColor indexed="64"/></patternFill></fill></fills><borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="6"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="2" fillId="2" borderId="0" xfId="0" applyFont="1" applyFill="1"/><xf numFmtId="165" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/><xf numFmtId="164" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/><xf numFmtId="164" fontId="1" fillId="0" borderId="0" xfId="0" applyNumberFormat="1" applyFont="1"/><xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1"/></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>`;
  // Statement sheet
- const H=['colDate','colDesc','colType','colInc','colExp','colBal','colCat'].map(k=>tr(k)).map((t,i)=>cs_(String.fromCharCode(65+i)+'1',t,1));
+ const H=['colDate','colDesc','colType','colInc','colExp','colBal','colCat','colSub'].map(k=>tr(k)).map((t,i)=>cs_(String.fromCharCode(65+i)+'1',t,1));
  const S=[H];let r=2,prev=null;
  if(v.hasOpening){S.push([cs_('B2',tr('opening'),5),cn_('F2',v.opening,4)]);prev=2;r=3}
  v.rows.forEach(x=>{
@@ -405,7 +437,7 @@ function buildXlsx(v){
   if(x.type==='i')c.push(cn_('D'+r,x.amt,3));
   if(x.type==='e')c.push(cn_('E'+r,x.amt,3));
   c.push(cf_('F'+r,prev?`F${prev}+D${r}-E${r}`:`D${r}-E${r}`,x.bal,3));
-  c.push(cs_('G'+r,cat(x).n));S.push(c);prev=r;r++;
+  c.push(cs_('G'+r,cat(x).n));if(subName(x))c.push(cs_('H'+r,subName(x)));S.push(c);prev=r;r++;
  });
  const first=v.hasOpening?3:2,last=r-1;
  if(v.rows.length)S.push([cs_('B'+r,tr('total'),5),cf_('D'+r,`SUM(D${first}:D${last})`,v.inc,4),cf_('E'+r,`SUM(E${first}:E${last})`,v.exp,4),cf_('F'+r,`F${last}`,v.closing,4)]);
@@ -423,7 +455,7 @@ function buildXlsx(v){
   {name:'xl/workbook.xml',data:X+`<workbook ${NS} xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets><sheet name="${esc(tr('sh1'))}" sheetId="1" r:id="rId1"/><sheet name="${esc(tr('sh2'))}" sheetId="2" r:id="rId2"/></sheets></workbook>`},
   {name:'xl/_rels/workbook.xml.rels',data:X+'<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet2.xml"/><Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>'},
   {name:'xl/styles.xml',data:styles},
-  {name:'xl/worksheets/sheet1.xml',data:sheet(S,[13,34,11,15,15,16,16],true)},
+  {name:'xl/worksheets/sheet1.xml',data:sheet(S,[13,34,11,15,15,16,16,18],true)},
   {name:'xl/worksheets/sheet2.xml',data:sheet(S2,[22,16,16,16],true)}
  ]);
 }
@@ -439,17 +471,17 @@ $('bcsv').onclick=async()=>{
 };
 $('bpdf').onclick=()=>window.print();
 $('bx').onclick=async()=>{
- if(await out('xisaab-backup-'+isoOf(new Date())+'.json',new Blob([JSON.stringify({v:2,items,cats:CC})],{type:'application/json'})))$('bs').textContent=tr('bkOk');
+ if(await out('xisaab-backup-'+isoOf(new Date())+'.json',new Blob([JSON.stringify({v:2,items,cats:CC,subs:CS})],{type:'application/json'})))$('bs').textContent=tr('bkOk');
 };
 $('bm').onclick=()=>$('fi').click();
 $('fi').onchange=async ev=>{
  const file=ev.target.files[0];if(!file)return;
  try{
   let arr=JSON.parse(await file.text());let n=0;
-  if(arr&&!Array.isArray(arr)){const cc=arr.cats||{};for(const ty of ['i','e'])(cc[ty]||[]).forEach(c=>{if(c&&c.k&&c.n&&!CC[ty].some(x=>x.k===c.k))CC[ty].push({k:String(c.k),ic:String(c.ic||'🏷'),n:String(c.n)})});saveCC();arr=arr.items||[]}
+  if(arr&&!Array.isArray(arr)){const cc=arr.cats||{};for(const ty of ['i','e'])(cc[ty]||[]).forEach(c=>{if(c&&c.k&&c.n&&!CC[ty].some(x=>x.k===c.k))CC[ty].push({k:String(c.k),ic:String(c.ic||'🏷'),n:String(c.n)})});saveCC();const sb=arr.subs||{};for(const k in sb)(sb[k]||[]).forEach(x=>{if(x&&x.k&&x.n){CS[k]=CS[k]||[];if(!CS[k].some(y=>y.k===x.k))CS[k].push({k:String(x.k),n:String(x.n)})}});saveCS();arr=arr.items||[]}
   for(const t of arr){
    if(!t||!t.id||!(t.amt>0)||(t.type!=='i'&&t.type!=='e'))continue;
-   if(!items.some(x=>x.id===Number(t.id))){items.push({id:Number(t.id),type:t.type,desc:String(t.desc||''),amt:Number(t.amt),d:t.d||undefined,c:t.c||undefined});n++}
+   if(!items.some(x=>x.id===Number(t.id))){items.push({id:Number(t.id),type:t.type,desc:String(t.desc||''),amt:Number(t.amt),d:t.d||undefined,c:t.c||undefined,s:t.s||undefined});n++}
   }
   save();render();$('bs').textContent=tr('restored',{n});
  }catch(e){$('bs').textContent=tr('badFile')}
