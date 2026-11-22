@@ -169,7 +169,7 @@ small.cs{display:block;color:var(--mut);font-size:11px;white-space:normal}
 <input type="file" id="fi" accept=".json,application/json" hidden>
 <div id="bs"></div>
 </div>
-<div class="sub noprint" style="text-align:center;margin-top:8px">v4.1</div>
+<div class="sub noprint" style="text-align:center;margin-top:8px">v4.2</div>
 </main>
 <div class="sheet noprint" id="sheet" hidden>
 <div class="panel">
@@ -496,11 +496,15 @@ function stat(){
  $('st').textContent=(navigator.onLine===false?'📴 ':'')+tr(ready?'offReady':'offWait');
 }
 window.addEventListener('online',stat);window.addEventListener('offline',stat);
+function doReload(){location.reload()}
+const editing=()=>!$('sheet').hidden||!$('csheet').hidden;
+function applyUpdate(){if(editing())$('upd').hidden=false;else doReload()}
 if(navigator.serviceWorker){
- navigator.serviceWorker.addEventListener('controllerchange',stat);
- navigator.serviceWorker.addEventListener('message',e=>{if(e.data&&e.data.type==='updated')$('upd').hidden=false});
+ const had=!!navigator.serviceWorker.controller;let reloaded=false;
+ navigator.serviceWorker.addEventListener('controllerchange',()=>{stat();if(had&&!reloaded){reloaded=true;applyUpdate()}});
+ navigator.serviceWorker.addEventListener('message',e=>{if(e.data&&e.data.type==='updated'&&!reloaded){reloaded=true;applyUpdate()}});
 }
-$('updB').onclick=()=>location.reload();
+$('updB').onclick=()=>doReload();
 function applyLang(){
  document.documentElement.lang=LG;
  document.title=tr('title');
